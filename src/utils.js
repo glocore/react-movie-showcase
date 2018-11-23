@@ -8,12 +8,14 @@ export const defaultFetch = async(path, query, options) => {
 
   try {
     const response = await fetch(url, options)
+
     const responseJson = await response.json()
+    if(!response.ok) throw responseJson
     
     return { error: null, data: responseJson }
 
   } catch(err) {
-    console.warn('Error fetching from path', path, err)
+    // console.warn('Error fetching from path', path, err)
     return { error: err, data: null }
   }
 }

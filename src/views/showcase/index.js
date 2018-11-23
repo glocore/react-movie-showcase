@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { fetchMovieInfo } from './service'
 
+const POSTER_BASE_URL = 'http://image.tmdb.org/t/p/w185'
+
 export default class Showcase extends Component {
   state = {
     loading: true,
@@ -32,7 +34,10 @@ export default class Showcase extends Component {
     ? <h1>Error</h1>
     : (
       <>
-        <img alt={`${this.state.movieInfo.title} poster`} src={`http://image.tmdb.org/t/p/w185${this.state.movieInfo.poster_path}`}/>
+        <img 
+          alt={`${this.state.movieInfo.title} poster`} 
+          src={`${POSTER_BASE_URL}${this.state.movieInfo.poster_path}`}
+        />
         <h1>{this.state.movieInfo.title}</h1>
         <p>{this.state.movieInfo.overview}</p>
         {this.state.movieInfo.genres.map((genre, index) => 
