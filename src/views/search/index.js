@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import _ from 'lodash'
+import { Link } from 'react-router-dom'
 
 import { 
   getTrendingMovies,
@@ -74,8 +75,11 @@ export default class Search extends Component {
     this.debouncedSearch(event)
   }
 
-  renderSearchResult = (data, index) => 
-    <p key={index}>{data.title || data.name}</p>
+  renderSearchResult = (data, index) => (
+    <Link to={`showcase/${data.id}`} key={index}>
+      <p>{data.title || data.name}</p>
+    </Link>
+  )
 
   render() {
     const { searchResults, loadingResults } = this.state
