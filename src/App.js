@@ -81,7 +81,7 @@ class App extends Component {
 
     return getImageUrl(
       config.images.secure_base_url,
-      config.images.backdrop_sizes[2],
+      config.images.backdrop_sizes[3],
       filePath
     )
   }

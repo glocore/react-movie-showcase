@@ -20,8 +20,9 @@ const Wrapper = styled(Link)`
   ${({ theme }) => theme.media.tablet`width: 33.33%;`}
   ${({ theme }) => theme.media.phone`width: 50%;`}
   transition: background 0.2s ease-in;
+  text-decoration: none;
   &: hover {
-    background-color: #444444;
+    background-color: #555555;
   }
 `
 
