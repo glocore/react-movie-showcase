@@ -12,62 +12,35 @@ const TRENDING_MOVIES_KEY = '__trending'
 export default class Search extends Component {
   constructor() {
     super()
-    this.debouncedSearch = _.debounce(this.searchMovies, 500)
+    this.debouncedSearch = _.debounce(this._searchMovies, 500)
   }
 
   state = {
     searchCache: {},
-    loadingResults: false,
+    loading: false,
     searchResults: [],
     searchTerm: '',
   }
 
   componentDidMount() {
-    this._getTrendingMovies()
+    this._updateSearchResults(TRENDING_MOVIES_KEY, getTrendingMovies)
   }
 
-  _getTrendingMovies = async() => {
-    this.updateSearchResults(TRENDING_MOVIES_KEY, getTrendingMovies)
+  _updateSearchResults = async(key, callback) => {
+    this.setState({ loading: true })
+    let searchResults
+
+    if(!key)
+      searchResults = await this.props.getSearchResults(TRENDING_MOVIES_KEY, getTrendingMovies)
+    else
+      searchResults = await this.props.getSearchResults(key, callback)
+
+    this.setState({ searchResults, loading: false })
   }
 
-  checkInCache = searchTerm =>
-    this.state.searchCache[searchTerm]
-  
-  updateSearchResults = async(searchTerm, callback) => {
-    if(searchTerm === '') {
-      this.setState({
-        searchResults: this.checkInCache(TRENDING_MOVIES_KEY)
-      })
-
-      return
-    }
-
-    let searchResults = this.checkInCache(searchTerm)
-
-    if(!searchResults) {
-      this.setState({ loadingResults: true })
-      
-      searchResults = await callback(searchTerm)
-
-      if(!searchResults) {
-        this.setState({ loadingResults: false })
-        return
-      }
-
-      this.setState({
-        searchCache: {
-          ...this.state.searchCache,
-          [searchTerm]: searchResults
-        }
-      })
-    }
-
-    this.setState({ loadingResults: false, searchResults })
-  }
-
-  searchMovies = event => {
-    const searchTerm = event.target.value
-    this.updateSearchResults(searchTerm, searchMovies)
+  _searchMovies = event => {
+    const searchTerm = event.target.value.trim()
+    this._updateSearchResults(searchTerm, searchMovies)
   }
 
   onInputChange = event => {
@@ -77,12 +50,13 @@ export default class Search extends Component {
 
   renderSearchResult = (data, index) => (
     <Link to={`showcase/${data.id}`} key={index}>
+      <img alt='poster' src={this.props.getPosterUrl(data.poster_path)}/>
       <p>{data.title || data.name}</p>
     </Link>
   )
 
   render() {
-    const { searchResults, loadingResults } = this.state
+    const { searchResults, loading } = this.state
 
     return (
       <>
@@ -91,7 +65,7 @@ export default class Search extends Component {
         placeholder='Search Movies'
       />
 
-      {loadingResults
+      {loading
         ? <p>loading...</p>
         : searchResults.map(this.renderSearchResult)
       }

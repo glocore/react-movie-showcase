@@ -28,3 +28,11 @@ export const serialize = obj => {
     }
   return `&${str.join("&")}`
 }
+
+export const getImageUrl = (baseUrl, size, filePath) => {
+  if(!baseUrl || !size || !filePath) return null
+
+  const path = baseUrl + size + filePath
+
+  return path
+}

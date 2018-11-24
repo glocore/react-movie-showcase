@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import { fetchMovieInfo } from './service'
-
-const POSTER_BASE_URL = 'http://image.tmdb.org/t/p/w185'
 
 export default class Showcase extends Component {
   state = {
@@ -30,20 +28,34 @@ export default class Showcase extends Component {
     return
   }
 
-  _renderMovieInfo = () => this.state.error
-    ? <h1>Error</h1>
+  _renderMovieInfo = () => {
+    const {
+      backdrop_path,
+      genres,
+      overview,
+      poster_path,
+      title,
+    } = this.state.movieInfo
+
+    return this.state.error
+    ? <Redirect to='/'/>
     : (
       <>
         <img 
-          alt={`${this.state.movieInfo.title} poster`} 
-          src={`${POSTER_BASE_URL}${this.state.movieInfo.poster_path}`}
+          alt={`${title} poster`} 
+          src={this.props.getPosterUrl(poster_path)}
         />
-        <h1>{this.state.movieInfo.title}</h1>
-        <p>{this.state.movieInfo.overview}</p>
-        {this.state.movieInfo.genres.map((genre, index) => 
+        <img 
+          alt={`${title} backdrop`} 
+          src={this.props.getBackdropUrl(backdrop_path)}
+        />
+        <h1>{title}</h1>
+        <p>{overview}</p>
+        {genres.map((genre, index) => 
           (<span key={index}>{genre.name}, </span>))}
       </>
     )
+  }
 
   render() {
     return (
