@@ -3,10 +3,13 @@ import {
   BrowserRouter as Router, 
   Route 
 } from 'react-router-dom'
+import { ThemeProvider } from 'styled-components'
+
 import Search from './views/search'
 import Showcase from './views/showcase'
 import { fetchConfig } from './service'
 import { getImageUrl } from './utils'
+import theme from './theme'
 
 class App extends Component {
   state = {
@@ -96,32 +99,34 @@ class App extends Component {
     }
 
     return (
-      <Router>
-        {this.state.loading
-          ? <p>Loading...</p>
-          : (        
-            <div>
-              <Route 
-                path="/" 
-                exact 
-                render={routeProps =>
-                  <Search
-                    {...routeProps}
-                    {...searchProps}
-                  />}
-              />
+      <ThemeProvider theme={theme}>
+        <Router>
+          {this.state.loading
+            ? <p>Loading...</p>
+            : (        
+              <div>
+                <Route 
+                  path="/" 
+                  exact 
+                  render={routeProps =>
+                    <Search
+                      {...routeProps}
+                      {...searchProps}
+                    />}
+                />
 
-              <Route 
-                path="/showcase/:id"
-                render={routeProps => 
-                  <Showcase 
-                    {...routeProps} 
-                    {...showcaseProps}
-                  />}
-              />
-            </div>
-        )}
-      </Router>
+                <Route 
+                  path="/showcase/:id"
+                  render={routeProps => 
+                    <Showcase 
+                      {...routeProps} 
+                      {...showcaseProps}
+                    />}
+                />
+              </div>
+          )}
+        </Router>
+      </ThemeProvider>
     );
   }
 }

@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import _ from 'lodash'
-import { Link } from 'react-router-dom'
+import styled from 'styled-components'
 
+import Searchbox from './components/Searchbox'
+import SearchResult from './components/SearchResult'
 import { 
   getTrendingMovies,
   searchMovies,
@@ -31,7 +33,8 @@ export default class Search extends Component {
     let searchResults
 
     if(!key)
-      searchResults = await this.props.getSearchResults(TRENDING_MOVIES_KEY, getTrendingMovies)
+      searchResults = await this.props.getSearchResults(
+        TRENDING_MOVIES_KEY, getTrendingMovies)
     else
       searchResults = await this.props.getSearchResults(key, callback)
 
@@ -48,29 +51,37 @@ export default class Search extends Component {
     this.debouncedSearch(event)
   }
 
-  renderSearchResult = (data, index) => (
-    <Link to={`showcase/${data.id}`} key={index}>
-      <img alt='poster' src={this.props.getPosterUrl(data.poster_path)}/>
-      <p>{data.title || data.name}</p>
-    </Link>
-  )
+  renderSearchResult = (data, index) => 
+    <SearchResult
+      posterPath={this.props.getPosterUrl(data.poster_path)}
+      title={data.title || data.name}
+      path={`showcase/${data.id}`}
+      key={index}
+    />
 
   render() {
     const { searchResults, loading } = this.state
 
     return (
       <>
-      <input 
-        onChange={this.onInputChange} 
-        placeholder='Search Movies'
-      />
+      <Searchbox onChange={this.onInputChange} />
 
-      {loading
-        ? <p>loading...</p>
-        : searchResults.map(this.renderSearchResult)
-      }
+      <ResultsWrapper>
+        {loading
+          ? <p>loading...</p>
+          : searchResults.map(this.renderSearchResult)
+        }
+      </ResultsWrapper>
       </>
 
     )
   }
 }
+
+const ResultsWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  max-width: ${({ theme }) => theme.mediaSizes.desktop}px;
+  margin: 100px auto;
+  padding: 10px;
+`
