@@ -5,6 +5,7 @@ import { FaTimes } from 'react-icons/fa'
 
 import Meta from './components/Meta'
 import Synopsis from './components/Synopsis'
+import Loading from '../../components/Loading'
 import { fetchMovieInfo } from './service'
 
 export default class Showcase extends Component {
@@ -90,7 +91,7 @@ export default class Showcase extends Component {
       <>
         <Close/>
         {!!this.state.loading
-          ? <p>Loading...</p>
+          ? <Loading/>
           : this._renderMovieInfo()
         }
       </>
@@ -116,7 +117,7 @@ const PageWrapper = styled.div`
 `
 
 const Backdrop = styled.div`
-  position: absolute;
+  position: fixed;
   top: 0;
   z-index: -1;
   width: 100vw;
