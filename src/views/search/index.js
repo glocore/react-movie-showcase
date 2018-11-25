@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import Searchbox from './components/Searchbox'
 import SearchResult from './components/SearchResult'
+import Loading from '../../components/Loading'
 import { 
   getTrendingMovies,
   searchMovies,
@@ -68,7 +69,7 @@ export default class Search extends Component {
 
       <ResultsWrapper>
         {loading
-          ? <p>loading...</p>
+          ? <Loading/>
           : searchResults.map(this.renderSearchResult)
         }
       </ResultsWrapper>

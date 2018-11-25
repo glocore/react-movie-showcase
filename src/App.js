@@ -7,6 +7,7 @@ import { ThemeProvider } from 'styled-components'
 
 import Search from './views/search'
 import Showcase from './views/showcase'
+import Loading from './components/Loading'
 import { fetchConfig } from './service'
 import { getImageUrl } from './utils'
 import theme from './theme'
@@ -102,7 +103,7 @@ class App extends Component {
       <ThemeProvider theme={theme}>
         <Router>
           {this.state.loading
-            ? <p>Loading...</p>
+            ? <Loading/>
             : (        
               <div>
                 <Route 
